@@ -24,6 +24,8 @@ from keras.layers import Conv1D, MaxPooling1D
 from keras import losses
 from keras.models import model_from_json
 import tensorflow as tf
+import keras.backend.tensorflow_backend as tfback
+
 import matplotlib as mpl
 import pylab as plt
 mpl.rcParams['pdf.fonttype'] = 42
@@ -36,7 +38,7 @@ freq_max = 20.0
 filter_data = True
 decimate_data = False # If false, assumes data is already 100 Hz samprate
 n_shift = 10 # Number of samples to shift the sliding window at a time
-n_gpu = 3 # Number of GPUs to use (if any)
+n_gpu = 1 # Number of GPUs to use (if any)
 #####################
 batch_size = 1000*3
 
@@ -44,6 +46,22 @@ half_dur = 2.00
 only_dt = 0.01
 n_win = int(half_dur/only_dt)
 n_feat = 2*n_win
+
+# ------------ Hack for https://github.com/keras-team/keras/issues/13684 
+
+def _get_available_gpus():
+    """Get a list of available gpu devices (formatted as strings).
+
+    # Returns
+        A list of available GPU devices.
+    """
+    #global _LOCAL_DEVICES
+    if tfback._LOCAL_DEVICES is None:
+        devices = tf.config.list_logical_devices()
+        tfback._LOCAL_DEVICES = [x.name for x in devices]
+    return [x for x in tfback._LOCAL_DEVICES if 'device:gpu' in x.lower()]
+
+tfback._get_available_gpus = _get_available_gpus
 
 #-------------------------------------------------------------
 
