@@ -1,0 +1,10 @@
+name: ross-gpd
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy
+  - obspy
+  - keras
+  - tensorflow
+  - matplotlib
