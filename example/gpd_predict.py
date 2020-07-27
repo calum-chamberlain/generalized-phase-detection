@@ -12,6 +12,7 @@
 # Editted heavily by Calum Chamberlain (2020) to be more Pythonic       
 import os
 import argparse as ap
+import obspy.core as oc
 
 from gpd import GPD
 
@@ -65,10 +66,9 @@ def main():
 
     detector = GPD(
         freq_min=freq_min, freq_max=freq_max, n_shift=n_shift, n_gpu=n_gpu,
-        batch_size=batch_size, half_dur=half_dur, n_win=n_win, n_feat=n_feat,
-        min_proba=min_proba)
+        batch_size=batch_size, half_dur=half_dur, min_proba=min_proba)
     
-    phases = []   
+    phases = dict() 
     for i in range(nsta):
         if not os.path.isfile(fdir[i][0]):
             print("%s doesn't exist, skipping" % fdir[i][0])
@@ -82,12 +82,19 @@ def main():
         st = oc.Stream()
         for fname in fdir[i]:
             st += oc.read(fname)
-        phases.extend(detector.detect(st, plot=args.plot))
+        _phases = detector.detect(st, plot=args.plot)
+        for key, value in _phases.items():
+            if key in phases.keys():
+                phases[key].extend(value)
+            else:
+                phases.update({key: value})
 
-    with open(args.outfile, "w" as f):
-        for phase in phases:
-            f.write("%s %s S %s\n" % (
-                phase.network, phase.sta, phase.time.isoformat()))
+    with open(args.outfile, "w") as f:
+        for _phases in phases.values():
+            for phase in _phases:
+                f.write("%s %s S %s\n" % (
+                    phase.network, phase.station, 
+                    phase.time.isoformat()))
 
 
 if __name__ == "__main__":

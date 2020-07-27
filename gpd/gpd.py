@@ -97,7 +97,7 @@ class GPD(object):
             for station in stations:
                 Logger.info(f"Working on station {station}")
                 station_stream = self.process_stream(
-                    st=network_st.select(station=station))
+                    st=network_stream.select(station=station))
                 Logger.info(f"Using data: {station_stream}")
                 try:
                     probabilities = self.predict(st=station_stream)
