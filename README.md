@@ -1,6 +1,6 @@
 # Generalized Seismic Phase Detection with Deep Learning
 
-This is a simple implementation of the Generalized Phase Detection (GPD) framework for seismic phase detection with deep learning. GPD uses deep convolutional networks to learn generalized representations of millions of P-wave, S-wave, and noise seismograms that can be used for phase detection and picking. The framework is described in
+This is a Pythonic implementation of the Generalized Phase Detection (GPD) framework for seismic phase detection with deep learning. GPD uses deep convolutional networks to learn generalized representations of millions of P-wave, S-wave, and noise seismograms that can be used for phase detection and picking. The framework is described in
 ```
 Ross, Z. E., Meier, M.-A., Hauksson, E., and T. H. Heaton (2018). Generalized Seismic Phase Detection with Deep Learning, Bull. Seismol. Soc. Am., doi: 10.1785/0120180080 [arXiv:1805.01075]
 ```
